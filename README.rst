@@ -10,13 +10,13 @@ Glances - An eye on your system
     :alt: Downloads
 
 Tested on Docker 19.03
-=======
+============
 - ``arm64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS)
 - ``amd64`` (Linux Ubuntu 18.04 LTS)
 
 
 Summary
-=======
+============
 
 **Glances** is a cross-platform monitoring tool which aims to present a
 large amount of monitoring information through a curses or Web
