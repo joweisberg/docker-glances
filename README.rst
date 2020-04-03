@@ -129,3 +129,17 @@ Docker-compose
 ---------------------
 
 .. code-block:: console
+
+    version: "3.5"
+    services:
+      glances:
+        container_name: glances
+        image: joweisberg/glances:latest
+        restart: unless-stopped
+        pid: host
+        ports:
+          - 61208:61208
+        environment:
+          - GLANCES_OPT=--webserver
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
