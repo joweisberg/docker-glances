@@ -6,20 +6,13 @@ Glances - An eye on your system
     :target: https://pypi.python.org/pypi/Glances
 
 .. image:: https://img.shields.io/github/stars/nicolargo/glances.svg
-    :target: https://github.com/joweisberg/glances/
+    :target: https://github.com/joweisberg/glances
     :alt: Github stars
 
 .. image:: https://pepy.tech/badge/glances/month
     :target: https://pepy.tech/project/glances
     :alt: Downloads
 
-.. image:: https://img.shields.io/travis/nicolargo/glances/master.svg?maxAge=3600&label=Linux%20/%20BSD%20/%20macOS
-    :target: https://travis-ci.org/joweisberg/glances
-    :alt: Linux tests (Travis)
-
-.. image:: https://img.shields.io/appveyor/ci/nicolargo/glances/master.svg?maxAge=3600&label=Windows
-    :target: https://ci.appveyor.com/project/joweisberg/glances
-    :alt: Windows tests (Appveyor)
 
 Summary
 =======
