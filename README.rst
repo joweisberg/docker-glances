@@ -75,7 +75,13 @@ Installation
 
 There are several methods to test/install Glances on your system. Choose your weapon!
 
-Docker: the funny way
+You can use with your favorite web browser:
+
+.. code-block:: console
+
+    http://localhost:61208
+
+Docker
 ---------------------
 
 A Glances container is available. It includes the latest development
@@ -118,3 +124,8 @@ variable setting parameters for the glances startup command):
 .. code-block:: console
 
     docker run -d --restart="always" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisebrg/glances
+
+Docker-compose
+---------------------
+
+.. code-block:: console
