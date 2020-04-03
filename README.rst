@@ -9,7 +9,10 @@ Glances - An eye on your system
     :target: https://pepy.tech/project/glances
     :alt: Downloads
 
-Tested on Docker arm64 (Rapsberry Pi 4 B) and amd64 (Linux Ubuntu)
+Tested on Docker 19.03
+=======
+- ``arm64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS)
+- ``amd64`` (Linux Ubuntu 18.04 LTS)
 
 
 Summary
