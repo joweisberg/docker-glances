@@ -5,10 +5,6 @@ Glances - An eye on your system
 .. image:: https://img.shields.io/pypi/v/glances.svg
     :target: https://pypi.python.org/pypi/Glances
 
-.. image:: https://img.shields.io/github/stars/nicolargo/glances.svg
-    :target: https://github.com/joweisberg/glances
-    :alt: Github stars
-
 .. image:: https://pepy.tech/badge/glances/month
     :target: https://pepy.tech/project/glances
     :alt: Downloads
