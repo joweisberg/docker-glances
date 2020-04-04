@@ -1,17 +1,19 @@
 Docker Glances - System monitoring
 ============
 
-![Version](https://img.shields.io/pypi/v/glances.svg)![](https://pypi.python.org/pypi/Glances)
-![Downloads](https://pepy.tech/badge/glances/month)![](https://pepy.tech/project/glances)
+![version](https://img.shields.io/pypi/v/glances.svg)![](https://pypi.python.org/pypi/Glances)
+![downloads](https://pepy.tech/badge/glances/month)![](https://pepy.tech/project/glances)
 
-**Glances** is a cross-platform monitoring tool which aims to present a
-large amount of monitoring information through a curses or Web
-based interface. The information dynamically adapts depending on the size of the user interface.
+**Glances** is a cross-platform monitoring tool which aims to present a large amount of monitoring information through a curses or Web based interface. The information dynamically adapts depending on the size of the user interface.
 
-Clone from :
-https://nicolargo.github.io/glances/
+A Glances container is available. It includes the latest development HEAD version. You can use it to monitor your server and all your other containers!
 
-Clone to be used on Docker
+Clone for Docker with initial setup from:
+https://github.com/nicolargo/glances
+
+![webui](https://raw.githubusercontent.com/nicolargo/glances/develop/docs/_static/glances-responsive-webdesign.png)
+
+Available only for Docker
 ============
 - ``arm64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS, Docker 19.03)
 - ``amd64`` (Linux Ubuntu 18.04 LTS, Docker 19.03)
@@ -51,23 +53,20 @@ Optional dependencies:
 - ``wifi`` (for the wifi plugin) [Linux-only]
 - ``zeroconf`` (for the autodiscover mode)
 
-Installation
+Installation via Docker
 ============
 
-There are several methods to test/install Glances on your system. Choose your weapon!
+Please follow the official documentation:
 
-You can use with your favorite web browser:
+    https://docs.docker.com/install/
 
-.. code-block:: console
+You can test with your web browser:
 
     http://localhost:61208
 
 Docker
 ---------------------
 
-A Glances container is available. It includes the latest development
-HEAD version. You can use it to monitor your server and all your other
-containers!
 
 Get the Glances container:
 
