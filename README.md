@@ -8,8 +8,7 @@ Docker Glances - System monitoring
 
 A Glances container is available. It includes the latest development HEAD version. You can use it to monitor your server and all your other containers!
 
-Clone for Docker with initial setup from:
-https://github.com/nicolargo/glances
+Clone for Docker with initial setup from: https://github.com/nicolargo/glances
 
 ![webui](https://raw.githubusercontent.com/nicolargo/glances/develop/docs/_static/glances-responsive-webdesign.png)
 
