@@ -9,7 +9,7 @@ large amount of monitoring information through a curses or Web
 based interface. The information dynamically adapts depending on the size of the user interface.
 
 Clone from :
-https://github.com/nicolargo/glances
+https://nicolargo.github.io/glances/
 
 Clone to be used on Docker
 ============
