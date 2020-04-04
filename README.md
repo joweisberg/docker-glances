@@ -1,39 +1,20 @@
-===============================
-Glances - An eye on your system
-===============================
-
-.. image:: https://img.shields.io/pypi/v/glances.svg
-    :target: https://pypi.python.org/pypi/Glances
-
-.. image:: https://pepy.tech/badge/glances/month
-    :target: https://pepy.tech/project/glances
-    :alt: Downloads
-
-Tested on Docker 19.03
+Docker Glances - System monitoring
 ============
-- ``arm64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS)
-- ``amd64`` (Linux Ubuntu 18.04 LTS)
 
-
-Summary
-============
+![Version](https://img.shields.io/pypi/v/glances.svg)![](https://pypi.python.org/pypi/Glances)
+![Downloads](https://pepy.tech/badge/glances/month)![](https://pepy.tech/project/glances)
 
 **Glances** is a cross-platform monitoring tool which aims to present a
 large amount of monitoring information through a curses or Web
-based interface. The information dynamically adapts depending on the
-size of the user interface.
+based interface. The information dynamically adapts depending on the size of the user interface.
 
-.. image:: https://raw.githubusercontent.com/nicolargo/glances/develop/docs/_static/glances-summary.png
+Clone from :
+https://github.com/nicolargo/glances
 
-It can also work in client/server mode. Remote monitoring could be done
-via terminal, Web interface or API (XML-RPC and RESTful). Stats can also
-be exported to files or external time/value databases.
-
-.. image:: https://raw.githubusercontent.com/nicolargo/glances/develop/docs/_static/glances-responsive-webdesign.png
-
-Glances is written in Python and uses libraries to grab information from
-your system. It is based on an open architecture where developers can
-add new plugins or exports modules.
+Clone to be used on Docker
+============
+- ``arm64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS, Docker 19.03)
+- ``amd64`` (Linux Ubuntu 18.04 LTS, Docker 19.03)
 
 Requirements
 ============
@@ -90,45 +71,15 @@ containers!
 
 Get the Glances container:
 
-.. code-block:: console
-
     docker pull joweisberg/glances
-
-Run the container in *console mode*:
-
-.. code-block:: console
-
-    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host --network host -it joweisberg/glances
-
-Additionally, if you want to use your own glances.conf file, you can
-create your own Dockerfile:
-
-.. code-block:: console
-
-    FROM joweisberg/glances
-    COPY glances.conf /glances/conf/glances.conf
-    CMD python -m glances -C /glances/conf/glances.conf $GLANCES_OPT
-
-Alternatively, you can specify something along the same lines with
-docker run options:
-
-.. code-block:: console
-
-    docker run -v `pwd`/glances.conf:/glances/conf/glances.conf -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host -it joweisberg/glances
-
-Where \`pwd\`/glances.conf is a local directory containing your glances.conf file.
 
 Run the container in *Web server mode* (notice the `GLANCES_OPT` environment
 variable setting parameters for the glances startup command):
-
-.. code-block:: console
 
     docker run -d --restart="always" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisebrg/glances
 
 Docker-compose
 ---------------------
-
-.. code-block:: console
 
     version: "3.5"
     services:
