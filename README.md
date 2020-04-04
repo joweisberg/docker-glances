@@ -68,12 +68,11 @@ Docker
 ---------------------
 
 
-Get the Glances container:
+Get the container:
 
     docker pull joweisberg/glances
 
-Run the container in *Web server mode* (notice the `GLANCES_OPT` environment
-variable setting parameters for the glances startup command):
+Run the container in *Web server mode* (notice the `GLANCES_OPT` environment variable setting parameters for the startup command):
 
     docker run -d --restart="always" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisebrg/glances
 
