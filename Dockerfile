@@ -30,9 +30,12 @@ WORKDIR /glances
 
 # EXPOSE PORT (For XMLRPC)
 EXPOSE 61209
-
 # EXPOSE PORT (For Web UI)
 EXPOSE 61208
+
+# Define healthcheck command.
+COPY healthcheck /usr/bin/healthcheck
+RUN chmod +x /usr/bin/healthcheck
 
 # Define default command.
 CMD python -m glances -C /glances/conf/glances.conf $GLANCES_OPT

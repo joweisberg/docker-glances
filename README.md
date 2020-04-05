@@ -74,7 +74,7 @@ Run the container in *Web server mode* (notice the `GLANCES_OPT` environment var
 $ docker run -d --restart="unless-stopped" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisebrg/glances
 ```
 
-### Docker-compose
+### Docker Compose
 
 ```yml
 version: "3.5"
@@ -88,6 +88,11 @@ services:
       - 61208:61208
     environment:
       - GLANCES_OPT=--webserver
+    healthcheck:
+      test: ["CMD", "/usr/bin/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 ```
