@@ -1,5 +1,4 @@
-Docker Glances - System monitoring
-============
+# Docker Glances - System monitoring
 
 ![version](https://img.shields.io/pypi/v/glances.svg)![](https://pypi.python.org/pypi/Glances)
 ![downloads](https://pepy.tech/badge/glances/month)![](https://pepy.tech/project/glances)
@@ -8,17 +7,17 @@ Docker Glances - System monitoring
 
 A Glances container is available. It includes the latest development HEAD version. You can use it to monitor your server and all your other containers!
 
-Clone for Docker with initial setup from: https://github.com/nicolargo/glances
+This is a fork of [nicolargo/glances](https://github.com/nicolargo/glances)
 
 ![webui](https://raw.githubusercontent.com/nicolargo/glances/develop/docs/_static/glances-responsive-webdesign.png)
 
-Available only for Docker
-============
-- ``arm64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS, Docker 19.03)
+## Available only for Docker
+
+This Docker image uses the correct latest version!
+- ``aarch64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS, Docker 19.03)
 - ``amd64`` (Linux Ubuntu 18.04 LTS, Docker 19.03)
 
-Requirements
-============
+## Requirements
 
 - ``python 2.7,>=3.4``
 - ``psutil>=5.3.0`` (better with latest version)
@@ -52,8 +51,7 @@ Optional dependencies:
 - ``wifi`` (for the wifi plugin) [Linux-only]
 - ``zeroconf`` (for the autodiscover mode)
 
-Installation via Docker
-============
+## Installation via Docker
 
 Please follow the official documentation:
 
@@ -63,31 +61,33 @@ You can test with your web browser:
 
     http://localhost:61208
 
-Docker
----------------------
-
+### Docker
 
 Get the container:
 
-    docker pull joweisberg/glances
-
+```bash
+$ docker pull joweisberg/glances
+```
 Run the container in *Web server mode* (notice the `GLANCES_OPT` environment variable setting parameters for the startup command):
 
-    docker run -d --restart="unless-stopped" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisebrg/glances
+```bash
+$ docker run -d --restart="unless-stopped" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisebrg/glances
+```
 
-Docker-compose
----------------------
+### Docker-compose
 
-    version: "3.5"
-    services:
-      glances:
-        container_name: glances
-        image: joweisberg/glances:latest
-        restart: unless-stopped
-        pid: host
-        ports:
-          - 61208:61208
-        environment:
-          - GLANCES_OPT=--webserver
-        volumes:
-          - /var/run/docker.sock:/var/run/docker.sock:ro
+```yml
+version: "3.5"
+services:
+  glances:
+    container_name: glances
+    image: joweisberg/glances:latest
+    restart: unless-stopped
+    pid: host
+    ports:
+      - 61208:61208
+    environment:
+      - GLANCES_OPT=--webserver
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+```
