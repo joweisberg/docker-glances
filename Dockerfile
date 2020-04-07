@@ -23,7 +23,9 @@ RUN pip install --upgrade pip
 
 # Install Glances (master branch)
 RUN pip install glances psutil
-RUN pip install glances[action,browser,cloud,cpuinfo,chart,docker,export,folders,gpu,ip,raid,snmp,web,wifi]
+# Default glances applications
+#RUN pip install glances[action,browser,cloud,cpuinfo,chart,docker,export,folders,gpu,ip,raid,snmp,web,wifi]
+RUN pip install glances[all]
 
 # Define working directory.
 WORKDIR /glances

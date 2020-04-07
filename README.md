@@ -95,4 +95,5 @@ services:
       retries: 5
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/docker/glances:/glances/conf
 ```
