@@ -14,7 +14,7 @@ This is a fork of [nicolargo/glances](https://github.com/nicolargo/glances)
 ## Available only for Docker
 
 This Docker image uses the correct latest version!
-- ``aarch64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS, Docker 19.03) -- image: joweisberg/glances:arm-latest
+- ``aarch64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS, Docker 19.03) -- image: joweisberg/glances:arm64
 - ``amd64`` (Linux Ubuntu 18.04 LTS, Docker 19.03) -- image: joweisberg/glances:latest
 
 ## Requirements
