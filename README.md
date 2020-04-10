@@ -11,12 +11,6 @@ This is a fork of [nicolargo/glances](https://github.com/nicolargo/glances)
 
 ![webui](https://raw.githubusercontent.com/nicolargo/glances/develop/docs/_static/glances-responsive-webdesign.png)
 
-## Available only for Docker
-
-This Docker image uses the correct latest version!
-- ``aarch64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS, Docker 19.03) -- image: joweisberg/glances:arm64
-- ``amd64`` (Linux Ubuntu 18.04 LTS, Docker 19.03) -- image: joweisberg/glances:latest
-
 ## Requirements
 
 - ``python 2.7,>=3.4``
@@ -60,6 +54,13 @@ Please follow the official documentation:
 You can test with your web browser:
 
     http://localhost:61208
+
+
+### Docker image platform
+
+This Docker image uses the correct latest version!
+- ``aarch64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS, Docker 19.03) -- image: joweisberg/certs-extraction:arm64
+- ``amd64`` (Linux Ubuntu 18.04 LTS, Docker 19.03) -- image: joweisberg/certs-extraction:latest
 
 ### Docker
 
