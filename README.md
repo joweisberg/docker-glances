@@ -55,24 +55,25 @@ You can test with your web browser:
 
     http://localhost:61208
 
+### Docker image platform / architecture
 
-### Docker image platform
-
-This Docker image uses the correct latest version!
-- ``aarch64`` (Rapsberry Pi 4 B w/ Ubuntu 18.04 LTS, Docker 19.03) -- image: joweisberg/certs-extraction:arm64
-- ``amd64`` (Linux Ubuntu 18.04 LTS, Docker 19.03) -- image: joweisberg/certs-extraction:latest
+The Docker image to use `joweisberg/glances:latest`.
+Build on Linux Ubuntu 18.04 LTS, Docker 19.03 for:
+- `x86_64` / `amd64`
+- `aarch64` / `arm64v8`
+- `arm` / `arm32v7`
 
 ### Docker
 
 Get the container:
 
 ```bash
-$ docker pull joweisberg/glances
+$ docker pull joweisberg/glances:latest
 ```
 Run the container in *Web server mode* (notice the `GLANCES_OPT` environment variable setting parameters for the startup command):
 
 ```bash
-$ docker run -d --restart="unless-stopped" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisebrg/glances
+$ docker run -d --restart="unless-stopped" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisebrg/glances:latest
 ```
 
 ### Docker Compose

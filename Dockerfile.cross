@@ -1,0 +1,43 @@
+#
+# Glances Dockerfile (based on Ubuntu)
+#
+# https://github.com/joweisberg/glances
+#
+# Pull base image.
+FROM __BASEIMAGE_ARCH__/ubuntu
+MAINTAINER Jonathan Weisberg <jo.weisberg@gmail.com>
+
+# Install Pyhton packages.
+__CROSS_COPY qemu-__QEMU_ARCH__-static /usr/bin
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python \
+    python-pip \
+    python-setuptools \
+    python-dev \
+    gcc \
+    libzmq3-dev \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+RUN pip install --upgrade pip
+
+# Install Glances (master branch)
+RUN pip install glances psutil
+# Default glances applications
+#RUN pip install glances[action,browser,cloud,cpuinfo,chart,docker,export,folders,gpu,ip,raid,snmp,web,wifi]
+RUN pip install glances[all]
+
+# Define working directory.
+WORKDIR /glances
+
+# EXPOSE PORT (For XMLRPC)
+EXPOSE 61209
+# EXPOSE PORT (For Web UI)
+EXPOSE 61208
+
+# Define healthcheck command.
+COPY healthcheck /usr/bin/healthcheck
+RUN chmod +x /usr/bin/healthcheck
+
+# Define default command.
+CMD python -m glances -C /glances/conf/glances.conf $GLANCES_OPT
