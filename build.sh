@@ -26,17 +26,23 @@ fi
 DOCKER_USER=$(echo $1 | cut -d'/' -f1)
 DOCKER_REPO=$(echo $1 | cut -d'/' -f2)
 
+echo "* Sign In to https://hub.docker.com/u/$DOCKER_USER"
+docker login -u $DOCKER_USER docker.io
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
 if [ $(apt list --installed 2> /dev/null | grep qemu | wc -l) -eq 0 ]; then
   echo "* Running ARM containers"
   sudo apt -y install qemu-user
+  docker run --rm --privileged multiarch/qemu-user-static:register --reset
 fi
-docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 echo "* Create different Dockerfile per architecture"
-for docker_arch in amd64 arm32v7 arm64v8; do
+for docker_arch in amd64 arm32v6 arm64v8; do
   case ${docker_arch} in
     amd64   ) qemu_arch="x86_64" ;;
-    arm32v7 ) qemu_arch="arm" ;;
+    arm32v6 ) qemu_arch="arm" ;;
     arm64v8 ) qemu_arch="aarch64" ;;    
   esac
   cp Dockerfile.cross Dockerfile.${docker_arch}
@@ -55,10 +61,13 @@ qemu_ver=$(git ls-remote --tags --refs https://github.com/multiarch/qemu-user-st
 for target_arch in x86_64 arm aarch64; do
   wget -Nq https://github.com/multiarch/qemu-user-static/releases/download/v${qemu_ver}/x86_64_qemu-${target_arch}-static.tar.gz
   tar -xvf x86_64_qemu-${target_arch}-static.tar.gz
+  if [ $? -ne 0 ]; then
+    exit 1
+  fi
 done
 
 echo "* Building and tagging individual images"
-for arch in amd64 arm32v7 arm64v8; do
+for arch in amd64 arm32v6 arm64v8; do
   docker build -f Dockerfile.${arch} -t $DOCKER_USER/$DOCKER_REPO:${arch}-latest .
   if [ $? -ne 0 ]; then
     echo "* Error on building image $DOCKER_USER/$DOCKER_REPO:${arch}-latest"
@@ -68,7 +77,7 @@ for arch in amd64 arm32v7 arm64v8; do
 done
 
 echo "* Building a multi-arch manifest"
-docker manifest create --amend $DOCKER_USER/$DOCKER_REPO:latest $DOCKER_USER/$DOCKER_REPO:amd64-latest $DOCKER_USER/$DOCKER_REPO:arm32v7-latest $DOCKER_USER/$DOCKER_REPO:arm64v8-latest
+docker manifest create --amend $DOCKER_USER/$DOCKER_REPO:latest $DOCKER_USER/$DOCKER_REPO:amd64-latest $DOCKER_USER/$DOCKER_REPO:arm32v6-latest $DOCKER_USER/$DOCKER_REPO:arm64v8-latest
 docker manifest push --purge $DOCKER_USER/$DOCKER_REPO:latest
 
 echo "* Cleanup unnecessary files"
