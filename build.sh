@@ -35,8 +35,22 @@ fi
 if [ $(apt list --installed 2> /dev/null | grep qemu | wc -l) -eq 0 ]; then
   echo "* Running ARM containers"
   sudo apt -y install qemu-user
-  docker run --rm --privileged multiarch/qemu-user-static:register --reset
 fi
+
+# To fix this issue the kernel needs to know what to do when requested to run ARM ELF binaries.
+# https://www.balena.io/blog/building-arm-containers-on-any-x86-machine-even-dockerhub/
+if [ ! -f ./.binfmt_misc.txt ]; then
+  echo "* Fix issue ARM kernel on x86 machine"
+  sudo umount /proc/sys/fs/binfmt_misc
+  sudo mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc
+  echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > sudo /proc/sys/fs/binfmt_misc/register
+  echo ":qemu-aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-aarch64-static:" > sudo /proc/sys/fs/binfmt_misc/register
+  docker run --rm --privileged multiarch/qemu-user-static:register --reset > /dev/null 2>&1
+  date > ./.binfmt_misc.txt
+fi
+
+echo "* Cleanup previous temporary files"
+rm -f Dockerfile.a* qemu-* x86_64_qemu-*
 
 echo "* Create different Dockerfile per architecture"
 for docker_arch in amd64 arm32v6 arm64v8; do
@@ -56,8 +70,20 @@ for docker_arch in amd64 arm32v6 arm64v8; do
 done
 
 echo "* Download OS architecture qmenu"
+echo "* qemu-user-static latest versions:"
+git ls-remote --tags --refs https://github.com/multiarch/qemu-user-static.git | cut -d'v' -f2 | sort -nr 2> /dev/null | head -n5
 # Get qemu-user-static latest version
-qemu_ver=$(git ls-remote --tags --refs https://github.com/multiarch/qemu-user-static.git | cut -d'v' -f2 | sort -nr 2> /dev/null | head -n1)
+if [ -f ./.qemu_ver.txt ]; then
+  qemu_ver=$(cat ./.qemu_ver.txt)
+else
+  qemu_ver=$(git ls-remote --tags --refs https://github.com/multiarch/qemu-user-static.git | cut -d'v' -f2 | sort -nr 2> /dev/null | head -n1)
+fi
+echo -n "* Enter qemu-user-static version <${qemu_ver}>? "
+read answer
+if [ -n "$answer" ]; then
+  qemu_ver=$answer
+fi
+echo ${qemu_ver} > ./.qemu_ver.txt
 for target_arch in x86_64 arm aarch64; do
   wget -Nq https://github.com/multiarch/qemu-user-static/releases/download/v${qemu_ver}/x86_64_qemu-${target_arch}-static.tar.gz
   tar -xvf x86_64_qemu-${target_arch}-static.tar.gz
@@ -67,13 +93,21 @@ for target_arch in x86_64 arm aarch64; do
 done
 
 echo "* Building and tagging individual images"
-for arch in amd64 arm32v6 arm64v8; do
-  docker build -f Dockerfile.${arch} -t $DOCKER_USER/$DOCKER_REPO:${arch}-latest .
+for docker_arch in amd64 arm32v6 arm64v8; do
+  if [ ${docker_arch} == "amd64" ]; then
+    docker build -f Dockerfile.${docker_arch} -t $DOCKER_USER/$DOCKER_REPO:latest .
+    if [ $? -ne 0 ]; then
+      echo "* Error on building image $DOCKER_USER/$DOCKER_REPO:latest"
+      exit 1
+    fi
+    docker push $DOCKER_USER/$DOCKER_REPO:latest
+  fi
+  docker build -f Dockerfile.${docker_arch} -t $DOCKER_USER/$DOCKER_REPO:${docker_arch}-latest .
   if [ $? -ne 0 ]; then
-    echo "* Error on building image $DOCKER_USER/$DOCKER_REPO:${arch}-latest"
+    echo "* Error on building image $DOCKER_USER/$DOCKER_REPO:${docker_arch}-latest"
     exit 1
   fi
-  docker push $DOCKER_USER/$DOCKER_REPO:${arch}-latest
+  docker push $DOCKER_USER/$DOCKER_REPO:${docker_arch}-latest
 done
 
 echo "* Building a multi-arch manifest"
