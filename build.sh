@@ -33,7 +33,7 @@ if [ $? -ne 0 ]; then
 fi
 
 if [ $(apt list --installed 2> /dev/null | grep qemu | wc -l) -eq 0 ]; then
-  echo "* Running ARM containers"
+  echo "* Intstall QEMU user emulation to run ARM containers"
   sudo apt -y install qemu-user
 fi
 
@@ -43,8 +43,8 @@ if [ ! -f ./.binfmt_misc.txt ]; then
   echo "* Fix issue ARM kernel on x86 machine"
   sudo umount /proc/sys/fs/binfmt_misc
   sudo mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc
-  echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > sudo /proc/sys/fs/binfmt_misc/register
-  echo ":qemu-aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-aarch64-static:" > sudo /proc/sys/fs/binfmt_misc/register
+  echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' | sudo tee /proc/sys/fs/binfmt_misc/register > /dev/null 2>&1
+  echo ":qemu-aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-aarch64-static:" | sudo tee /proc/sys/fs/binfmt_misc/register > /dev/null 2>&1
   docker run --rm --privileged multiarch/qemu-user-static:register --reset > /dev/null 2>&1
   date > ./.binfmt_misc.txt
 fi
@@ -116,5 +116,11 @@ docker manifest push --purge $DOCKER_USER/$DOCKER_REPO:latest
 
 echo "* Cleanup unnecessary files"
 rm -f Dockerfile.a* qemu-* x86_64_qemu-*
+
+echo -n "* Remove QEMU user emulation package? [y/N]"
+read answer
+if [ -n "$(echo $answer | grep -i '^y')" ]; then
+  sudo apt -y remove --autoremove qemu-user
+fi
 
 exit 0
