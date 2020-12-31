@@ -53,10 +53,10 @@ echo "* Cleanup previous temporary files"
 rm -f Dockerfile.a* qemu-* x86_64_qemu-*
 
 echo "* Create different Dockerfile per architecture"
-for docker_arch in amd64 arm32v6 arm64v8; do
+for docker_arch in amd64 arm32v7 arm64v8; do
   case ${docker_arch} in
     amd64   ) qemu_arch="x86_64" ;;
-    arm32v6 ) qemu_arch="arm" ;;
+    arm32v7 ) qemu_arch="arm" ;;
     arm64v8 ) qemu_arch="aarch64" ;;    
   esac
   cp Dockerfile.cross Dockerfile.${docker_arch}
@@ -93,7 +93,7 @@ for target_arch in x86_64 arm aarch64; do
 done
 
 echo "* Building and tagging individual images"
-for docker_arch in amd64 arm32v6 arm64v8; do
+for docker_arch in amd64 arm32v7 arm64v8; do
   if [ ${docker_arch} == "amd64" ]; then
     docker build -f Dockerfile.${docker_arch} -t $DOCKER_USER/$DOCKER_REPO:latest .
     if [ $? -ne 0 ]; then
@@ -111,7 +111,7 @@ for docker_arch in amd64 arm32v6 arm64v8; do
 done
 
 echo "* Building a multi-arch manifest"
-docker manifest create --amend $DOCKER_USER/$DOCKER_REPO:latest $DOCKER_USER/$DOCKER_REPO:amd64-latest $DOCKER_USER/$DOCKER_REPO:arm32v6-latest $DOCKER_USER/$DOCKER_REPO:arm64v8-latest
+docker manifest create --amend $DOCKER_USER/$DOCKER_REPO:latest $DOCKER_USER/$DOCKER_REPO:amd64-latest $DOCKER_USER/$DOCKER_REPO:arm32v7-latest $DOCKER_USER/$DOCKER_REPO:arm64v8-latest
 docker manifest push --purge $DOCKER_USER/$DOCKER_REPO:latest
 
 echo "* Cleanup unnecessary files"

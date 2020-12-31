@@ -61,7 +61,7 @@ The Docker image to use `joweisberg/glances:latest`.
 Build on Linux Ubuntu 20.04 LTS, Docker 19.03 for:
 - `x86_64` / `amd64`
 - `aarch64` / `arm64v8`
-- `arm` / `arm32v6`
+- `arm` / `arm32v7`
 
 ### Docker
 
