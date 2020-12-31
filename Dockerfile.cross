@@ -9,14 +9,13 @@ MAINTAINER Jonathan Weisberg <jo.weisberg@gmail.com>
 
 # Install Pyhton packages.
 __CROSS_COPY qemu-__QEMU_ARCH__-static /usr/bin
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python \
-    python-pip \
-    python-setuptools \
-    python-dev \
-    gcc \
-    libzmq3-dev \
-    && \
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends bash tzdata python curl ca-certificates
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Download the installation script for Pip from pypa.com
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py
+RUN apt-get install -y --no-install-recommends python-setuptools python-dev gcc libzmq3-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 RUN pip install --upgrade pip

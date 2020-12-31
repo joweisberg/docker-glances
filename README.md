@@ -58,10 +58,10 @@ You can test with your web browser:
 ### Docker image platform / architecture
 
 The Docker image to use `joweisberg/glances:latest`.
-Build on Linux Ubuntu 18.04 LTS, Docker 19.03 for:
+Build on Linux Ubuntu 20.04 LTS, Docker 19.03 for:
 - `x86_64` / `amd64`
 - `aarch64` / `arm64v8`
-- `arm` / `arm32v7`
+- `arm` / `arm32v6`
 
 ### Docker
 
@@ -73,7 +73,7 @@ $ docker pull joweisberg/glances:latest
 Run the container in *Web server mode* (notice the `GLANCES_OPT` environment variable setting parameters for the startup command):
 
 ```bash
-$ docker run -d --restart="unless-stopped" -p 61208-61209:61208-61209 -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisebrg/glances:latest
+$ docker run -d --restart="unless-stopped" -p 61208-61209:61208-61209 -e TZ="Europe/Paris" -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisebrg/glances:latest
 ```
 
 ### Docker Compose
@@ -89,6 +89,7 @@ services:
     ports:
       - 61208:61208
     environment:
+      - TZ=Europe/Paris
       - GLANCES_OPT=--webserver
     healthcheck:
       test: ["CMD", "/usr/bin/healthcheck"]
