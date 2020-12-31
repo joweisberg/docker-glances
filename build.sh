@@ -117,6 +117,13 @@ docker manifest push --purge $DOCKER_USER/$DOCKER_REPO:latest
 echo "* Cleanup unnecessary files"
 rm -f Dockerfile.a* qemu-* x86_64_qemu-*
 
+echo -n "* Remove unused volumes and images? [y/N] "
+read answer
+if [ -n "$(echo $answer | grep -i '^y')" ]; then
+  echo "* "
+  docker system prune --all --volumes --force
+fi
+
 echo -n "* Remove QEMU user emulation package? [y/N]"
 read answer
 if [ -n "$(echo $answer | grep -i '^y')" ]; then
