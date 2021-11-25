@@ -73,7 +73,7 @@ $ docker pull joweisberg/glances:latest
 Run the container in *Web server mode* (notice the `GLANCES_OPT` environment variable setting parameters for the startup command):
 
 ```bash
-$ docker run -d --restart="unless-stopped" -p 61208-61209:61208-61209 -e TZ="Europe/Paris" -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisebrg/glances:latest
+$ docker run -d --restart="unless-stopped" -p 61208-61209:61208-61209 -e TZ="Europe/Paris" -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisberg/glances:latest
 ```
 
 ### Docker Compose
