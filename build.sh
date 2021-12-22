@@ -68,7 +68,7 @@ rm -f Dockerfile.a* qemu-* x86_64_qemu-*
 echo "* Create different Dockerfile per architecture"
 for docker_arch in amd64 arm32 arm64; do
   case ${docker_arch} in
-    amd64   ) qemu_arch="x86_64" ;;
+    amd64 ) qemu_arch="x86_64" ;;
     arm32 ) qemu_arch="arm" ;;
     arm64 ) qemu_arch="aarch64" ;;    
   esac
@@ -152,7 +152,7 @@ fi
 echo -n "* Remove QEMU user emulation package? [y/N]"
 read answer
 if [ -n "$(echo $answer | grep -i '^y')" ]; then
-  sudo apt -y remove --autoremove qemu-user
+  sudo apt -y remove --autoremove qemu-user qemu-user-static binfmt-support
   sudo rm -f ./.qemu_ver.txt
   sudo rm -f ./.binfmt_misc.txt
 fi

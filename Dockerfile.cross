@@ -21,7 +21,7 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 
 # Install packages for timezone and healthcheck
-RUN apt-get install -y --no-install-recommends bash tzdata curl ca-certificates
+RUN apt-get install -y --no-install-recommends bash tzdata curl
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Install the dependencies beforehand to make them cacheable
@@ -35,10 +35,6 @@ RUN CASS_DRIVER_NO_CYTHON=1 pip3 install --no-cache-dir --user -r requirements-o
 # Force install otherwise it could be cached without rerun
 ARG CHANGING_ARG
 RUN pip3 install --no-cache-dir --user glances[all]
-
-# Define healthcheck command
-COPY healthcheck /usr/bin/healthcheck
-RUN chmod +x /usr/bin/healthcheck
 
 # EXPOSE PORT (XMLRPC / WebUI)
 EXPOSE 61209 61208
