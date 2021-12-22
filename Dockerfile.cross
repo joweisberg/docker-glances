@@ -1,42 +1,49 @@
 #
-# Glances Dockerfile (based on Ubuntu)
+# Glances Dockerfile (based on Debian)
 #
-# https://github.com/joweisberg/glances
+# https://github.com/nicolargo/glances
 #
-# Pull base image.
-FROM __BASEIMAGE_ARCH__/ubuntu
+
+FROM __BASEIMAGE_ARCH__/python:slim
 MAINTAINER Jonathan Weisberg <jo.weisberg@gmail.com>
 
-# Install Pyhton packages.
-__CROSS_COPY qemu-__QEMU_ARCH__-static /usr/bin
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends bash tzdata python curl ca-certificates
+# Install packages
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+  python3-dev \
+  curl \
+  build-essential \
+  lm-sensors \
+  wireless-tools \
+  smartmontools \
+  iputils-ping && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+# Install packages for timezone and healthcheck
+RUN apt-get install -y --no-install-recommends bash tzdata curl ca-certificates
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Download the installation script for Pip from pypa.com
-RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py
-RUN apt-get install -y --no-install-recommends python-setuptools python-dev gcc libzmq3-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-RUN pip install --upgrade pip
+# Install the dependencies beforehand to make them cacheable
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir --user -r requirements.txt
 
-# Install Glances (master branch)
-RUN pip install glances psutil
-# Default glances applications
-#RUN pip install glances[action,browser,cloud,cpuinfo,chart,docker,export,folders,gpu,ip,raid,snmp,web,wifi]
-RUN pip install glances[all]
+# Install additional packages
+COPY requirements-optional.txt ./
+RUN CASS_DRIVER_NO_CYTHON=1 pip3 install --no-cache-dir --user -r requirements-optional.txt
 
-# Define working directory.
-WORKDIR /glances
+# Force install otherwise it could be cached without rerun
+ARG CHANGING_ARG
+RUN pip3 install --no-cache-dir --user glances[all]
 
-# EXPOSE PORT (For XMLRPC)
-EXPOSE 61209
-# EXPOSE PORT (For Web UI)
-EXPOSE 61208
-
-# Define healthcheck command.
+# Define healthcheck command
 COPY healthcheck /usr/bin/healthcheck
 RUN chmod +x /usr/bin/healthcheck
 
-# Define default command.
-CMD python -m glances -C /glances/conf/glances.conf $GLANCES_OPT
+# EXPOSE PORT (XMLRPC / WebUI)
+EXPOSE 61209 61208
+
+WORKDIR /glances
+
+# Define default command
+CMD python3 -m glances -C /glances/conf/glances.conf $GLANCES_OPT

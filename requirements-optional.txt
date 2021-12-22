@@ -1,0 +1,17 @@
+#
+# https://raw.githubusercontent.com/nicolargo/glances/develop/optional-requirements.txt
+#
+# install with base requirements file
+# 
+-r requirements.txt
+
+batinfo
+docker>=2.0.0
+hddtemp
+pymdstat
+pysnmp
+pySMART.smartx
+statsd
+wifi
+zeroconf==0.19.1; python_version < "3.0"
+zeroconf; python_version >= "3.0"

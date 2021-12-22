@@ -1,0 +1,7 @@
+#
+# https://raw.githubusercontent.com/nicolargo/glances/develop/requirements.txt
+#
+psutil>=5.3.0
+defusedxml
+future
+packaging
