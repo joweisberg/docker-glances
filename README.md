@@ -1,3 +1,12 @@
+# docker-glances
+
+This is a fork of [nicolargo/glances](https://github.com/nicolargo/glances/), to provide arm32, arm64 architecture version. This version is working with Glances 3.2.4.2 with psutil 5.8.0
+
+This project:
+
+- GitHub [joweisberg/docker-glances](https://github.com/joweisberg/docker-glances/)
+- Docker Hub [joweisberg/glances](https://hub.docker.com/r/joweisberg/glances/)
+
 # Docker Glances - System monitoring
 
 ![version](https://img.shields.io/pypi/v/glances.svg)![](https://pypi.python.org/pypi/Glances)
@@ -6,8 +15,6 @@
 **Glances** is a cross-platform monitoring tool which aims to present a large amount of monitoring information through a curses or Web based interface. The information dynamically adapts depending on the size of the user interface.
 
 A Glances container is available. It includes the latest development HEAD version. You can use it to monitor your server and all your other containers!
-
-This is a fork of [nicolargo/glances](https://github.com/nicolargo/glances)
 
 ![webui](https://raw.githubusercontent.com/nicolargo/glances/develop/docs/_static/glances-responsive-webdesign.png)
 
@@ -62,9 +69,9 @@ You can test with your web browser:
 
     http://localhost:61208
 
-### Docker image platform / architecture
+## Docker image platform / architecture
 
-The Docker image to use `joweisberg/glances:amd64`.
+The Docker image to use `joweisberg/glances:latest`.
 Build on Linux Ubuntu 20.04 LTS, Docker 19.03 and above for:
 
 | Platform | Architecture / Tags |
@@ -73,27 +80,28 @@ Build on Linux Ubuntu 20.04 LTS, Docker 19.03 and above for:
 | aarch64 | arm64 |
 | arm | arm32 |
 
-### Docker
+## Docker
 
-Get the container:
-
-```bash
-$ docker pull joweisberg/glances:amd64
-```
-Run the container in *Web server mode* (notice the `GLANCES_OPT` environment variable setting parameters for the startup command):
+### Get the container
 
 ```bash
-$ docker run -d --restart="unless-stopped" -p 61208-61209:61208-61209 -e TZ="Europe/Paris" -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisberg/glances:amd64
+$ docker pull joweisberg/glances:latest
 ```
 
-### Docker Compose
+### Run the container in *Web server mode* (notice the `GLANCES_OPT` environment variable setting parameters for the startup command)
+
+```bash
+$ docker run -d --restart="unless-stopped" -p 61208-61209:61208-61209 -e TZ="Europe/Paris" -e GLANCES_OPT="-w" -v /var/run/docker.sock:/var/run/docker.sock:ro --pid host joweisberg/glances:latest
+```
+
+### Run the container via docker-compose
 
 ```yml
 version: "3.5"
 services:
   glances:
     container_name: glances
-    image: joweisberg/glances:amd64
+    image: joweisberg/glances:latest
     restart: unless-stopped
     pid: host
     ports:
@@ -101,11 +109,6 @@ services:
     environment:
       - TZ=Europe/Paris
       - GLANCES_OPT=--webserver
-    healthcheck:
-      test: ["CMD", "/usr/bin/healthcheck"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /var/docker/glances:/glances/conf
